@@ -22,6 +22,6 @@ conda create --name mnist --clone root
 source activate mnist
 ```
 
-4. Install Tensorflow  with `pip install tensorflow`
+4. Install Tensorflow and Plotly with `pip install tensorflow plotly`
 5. Start a Jupyter Notebook with `jupyter notebook`
 6. Hit up `localhost:8888` in your browser if it doesn't go there itself.

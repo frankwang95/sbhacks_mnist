@@ -3,7 +3,7 @@ import numpy as np
 
 
 class FFNN(object):
-    def __init__(self, layers, activation=tf.tanh, output_activation=tf.identity, input_vector=None, session=None):
+    def __init__(self, layers, activation=tf.tanh, output_activation=tf.identity, post_function=tf.identity, input_vector=None, session=None):
         """ An implementation of a simple feed-forward neural network using the low-level
             tensorflow API.
 
@@ -35,6 +35,8 @@ class FFNN(object):
         """
         # Set basic attributes
         self.activation = activation
+        self.output_activation = output_activation
+        self.post_function = post_function
         self.layers = layers
         self.learning_curve = []
         self.epochs = 0
@@ -63,7 +65,7 @@ class FFNN(object):
         for w, b in zip(self.weights[:-1], self.biases[:-1]):
             self.output = self.activation(tf.matmul(self.output, w) + b)
         # The last layer has its own activation applied
-        self.output = output_activation(tf.matmul(self.output, self.weights[-1]) + self.biases[-1])
+        self.output = self.output_activation(tf.matmul(self.output, self.weights[-1]) + self.biases[-1])
 
         # Initialize variables
         self.session.run(tf.global_variables_initializer())
@@ -111,4 +113,5 @@ class FFNN(object):
         Returns
             <np.ndarray>
         """
-        return self.session.run(self.output, feed_dict={self.input: in_vector})
+        return self.session.run(self.post_function(self.output), feed_dict={self.input: in_vector})
+
